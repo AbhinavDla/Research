@@ -1,0 +1,249 @@
+======================================================================
+SimCLR LATENT-SPACE ENSEMBLE (Optimized)
+======================================================================
+
+Device: cuda
+Number of latent spaces: 20
+Latent dimensions: 32
+Nearest neighbors: 5
+Epochs per space: 10
+Training images per space: 60000
+Batch size: 512
+Label settings: ['50 labels/class']
+
+
+======================================================================
+LATENT SPACE 1/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3086
+    Epoch 05/10 | SimCLR Loss: 5.0453
+    Epoch 10/10 | SimCLR Loss: 5.0246
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.32%
+    (elapsed: 0.4 min)
+
+======================================================================
+LATENT SPACE 2/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3045
+    Epoch 05/10 | SimCLR Loss: 5.0482
+    Epoch 10/10 | SimCLR Loss: 5.0273
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.58%
+    (elapsed: 0.7 min)
+
+======================================================================
+LATENT SPACE 3/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3060
+    Epoch 05/10 | SimCLR Loss: 5.0478
+    Epoch 10/10 | SimCLR Loss: 5.0260
+
+    Encoder training complete and frozen.
+     50 labels/class: 91.89%
+    (elapsed: 1.1 min)
+
+======================================================================
+LATENT SPACE 4/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3021
+    Epoch 05/10 | SimCLR Loss: 5.0466
+    Epoch 10/10 | SimCLR Loss: 5.0258
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.33%
+    (elapsed: 1.4 min)
+
+======================================================================
+LATENT SPACE 5/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3161
+    Epoch 05/10 | SimCLR Loss: 5.0489
+    Epoch 10/10 | SimCLR Loss: 5.0279
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.82%
+    (elapsed: 1.8 min)
+
+======================================================================
+LATENT SPACE 6/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3065
+    Epoch 05/10 | SimCLR Loss: 5.0473
+    Epoch 10/10 | SimCLR Loss: 5.0267
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.38%
+    (elapsed: 2.2 min)
+
+======================================================================
+LATENT SPACE 7/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3104
+    Epoch 05/10 | SimCLR Loss: 5.0494
+    Epoch 10/10 | SimCLR Loss: 5.0279
+
+    Encoder training complete and frozen.
+     50 labels/class: 91.29%
+    (elapsed: 2.9 min)
+
+======================================================================
+LATENT SPACE 8/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.2984
+    Epoch 05/10 | SimCLR Loss: 5.0466
+    Epoch 10/10 | SimCLR Loss: 5.0255
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.84%
+    (elapsed: 3.3 min)
+
+======================================================================
+LATENT SPACE 9/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.2947
+    Epoch 05/10 | SimCLR Loss: 5.0478
+    Epoch 10/10 | SimCLR Loss: 5.0265
+
+    Encoder training complete and frozen.
+     50 labels/class: 93.04%
+    (elapsed: 3.9 min)
+
+======================================================================
+LATENT SPACE 10/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3075
+    Epoch 05/10 | SimCLR Loss: 5.0475
+    Epoch 10/10 | SimCLR Loss: 5.0264
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.45%
+    (elapsed: 4.5 min)
+
+======================================================================
+LATENT SPACE 11/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3203
+    Epoch 05/10 | SimCLR Loss: 5.0498
+    Epoch 10/10 | SimCLR Loss: 5.0282
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.22%
+    (elapsed: 5.3 min)
+
+======================================================================
+LATENT SPACE 12/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.2984
+    Epoch 05/10 | SimCLR Loss: 5.0472
+    Epoch 10/10 | SimCLR Loss: 5.0253
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.10%
+    (elapsed: 5.8 min)
+
+======================================================================
+LATENT SPACE 13/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3199
+    Epoch 05/10 | SimCLR Loss: 5.0523
+    Epoch 10/10 | SimCLR Loss: 5.0300
+
+    Encoder training complete and frozen.
+     50 labels/class: 91.57%
+    (elapsed: 6.4 min)
+
+======================================================================
+LATENT SPACE 14/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3126
+    Epoch 05/10 | SimCLR Loss: 5.0474
+    Epoch 10/10 | SimCLR Loss: 5.0269
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.51%
+    (elapsed: 7.0 min)
+
+======================================================================
+LATENT SPACE 15/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3273
+    Epoch 05/10 | SimCLR Loss: 5.0464
+    Epoch 10/10 | SimCLR Loss: 5.0254
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.08%
+    (elapsed: 7.6 min)
+
+======================================================================
+LATENT SPACE 16/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.2995
+    Epoch 05/10 | SimCLR Loss: 5.0474
+    Epoch 10/10 | SimCLR Loss: 5.0261
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.68%
+    (elapsed: 8.2 min)
+
+======================================================================
+LATENT SPACE 17/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3253
+    Epoch 05/10 | SimCLR Loss: 5.0494
+    Epoch 10/10 | SimCLR Loss: 5.0267
+
+    Encoder training complete and frozen.
+     50 labels/class: 91.99%
+    (elapsed: 8.9 min)
+
+======================================================================
+LATENT SPACE 18/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3205
+    Epoch 05/10 | SimCLR Loss: 5.0497
+    Epoch 10/10 | SimCLR Loss: 5.0277
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.10%
+    (elapsed: 9.5 min)
+
+======================================================================
+LATENT SPACE 19/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3264
+    Epoch 05/10 | SimCLR Loss: 5.0479
+    Epoch 10/10 | SimCLR Loss: 5.0260
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.52%
+    (elapsed: 10.2 min)
+
+======================================================================
+LATENT SPACE 20/20
+======================================================================
+    Epoch 01/10 | SimCLR Loss: 5.3036
+    Epoch 05/10 | SimCLR Loss: 5.0469
+    Epoch 10/10 | SimCLR Loss: 5.0260
+
+    Encoder training complete and frozen.
+     50 labels/class: 92.46%
+    (elapsed: 11.0 min)
+
+======================================================================
+BASELINE: kNN ON RAW PIXELS
+======================================================================
+     50 labels/class: 86.97%
+
+======================================================================
+RESULTS SUMMARY
+======================================================================
+
+          Labels | Raw pixels | Mean single |    Std | Ensemble |   Gain
+----------------------------------------------------------------------
+ 50 labels/class |     86.97% |      92.31% |  0.41% |   92.69% | +0.38
+
+Gain = ensemble accuracy minus mean single-space accuracy (percentage points).
+Total time: 11.0 minutes
