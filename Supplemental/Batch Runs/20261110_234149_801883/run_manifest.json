@@ -1,0 +1,31 @@
+{
+  "batch_id": "20261110_234149_801883",
+  "latent_dimension": 64,
+  "latent_space_counts": [
+    5,
+    10
+  ],
+  "status": "completed",
+  "experiments": [
+    {
+      "notebook": "anomaly_cleaning_train_0-6_inject_7-9.ipynb",
+      "latent_spaces": 5,
+      "status": "completed"
+    },
+    {
+      "notebook": "anomaly_cleaning_train_0-6_inject_7-9.ipynb",
+      "latent_spaces": 10,
+      "status": "completed"
+    },
+    {
+      "notebook": "anomaly_cleaning_train_0-8_inject_9.ipynb",
+      "latent_spaces": 5,
+      "status": "completed"
+    },
+    {
+      "notebook": "anomaly_cleaning_train_0-8_inject_9.ipynb",
+      "latent_spaces": 10,
+      "status": "completed"
+    }
+  ]
+}

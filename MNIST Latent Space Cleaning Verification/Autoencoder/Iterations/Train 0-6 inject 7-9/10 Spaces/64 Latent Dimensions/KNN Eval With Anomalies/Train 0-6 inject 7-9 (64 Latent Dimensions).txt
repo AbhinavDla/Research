@@ -1,0 +1,95 @@
+======================================================================
+SCENARIO: Train on digits 0-6, inject 7-9  (latent dim 64, score mode combined)
+======================================================================
+
+===== seed 1/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 62 injected (precision 14.7%, chance would be 5.0%)
+      removed 421 | 39 injected (precision 9.3%, chance would be 5.0%)
+      removed 421 | 54 injected (precision 12.8%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 98.24% | detection AUROC 66.32%
+  [ceiling  ] n= 20000 | accuracy 98.68% | detection AUROC 86.32%
+
+===== seed 2/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 56 injected (precision 13.3%, chance would be 5.0%)
+      removed 421 | 55 injected (precision 13.1%, chance would be 5.0%)
+      removed 421 | 54 injected (precision 12.8%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 98.20% | detection AUROC 66.53%
+  [ceiling  ] n= 20000 | accuracy 98.63% | detection AUROC 86.75%
+
+===== seed 3/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 60 injected (precision 14.3%, chance would be 5.0%)
+      removed 421 | 54 injected (precision 12.8%, chance would be 5.0%)
+      removed 421 | 44 injected (precision 10.5%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 98.25% | detection AUROC 66.40%
+  [ceiling  ] n= 20000 | accuracy 98.66% | detection AUROC 86.78%
+
+===== seed 4/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 59 injected (precision 14.0%, chance would be 5.0%)
+      removed 421 | 62 injected (precision 14.7%, chance would be 5.0%)
+      removed 421 | 42 injected (precision 10.0%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 98.14% | detection AUROC 66.38%
+  [ceiling  ] n= 20000 | accuracy 98.50% | detection AUROC 86.32%
+
+===== seed 5/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 74 injected (precision 17.6%, chance would be 5.0%)
+      removed 421 | 47 injected (precision 11.2%, chance would be 5.0%)
+      removed 421 | 58 injected (precision 13.8%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 98.33% | detection AUROC 67.31%
+  [ceiling  ] n= 20000 | accuracy 98.55% | detection AUROC 86.76%
+
+===== seed 6/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 59 injected (precision 14.0%, chance would be 5.0%)
+      removed 421 | 40 injected (precision 9.5%, chance would be 5.0%)
+      removed 421 | 46 injected (precision 10.9%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 98.24% | detection AUROC 66.07%
+  [ceiling  ] n= 20000 | accuracy 98.84% | detection AUROC 86.53%
+
+===== seed 7/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 50 injected (precision 11.9%, chance would be 5.0%)
+      removed 421 | 54 injected (precision 12.8%, chance would be 5.0%)
+      removed 421 | 32 injected (precision 7.6%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 97.85% | detection AUROC 66.23%
+  [ceiling  ] n= 20000 | accuracy 98.50% | detection AUROC 85.65%
+
+===== seed 8/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 76 injected (precision 18.1%, chance would be 5.0%)
+      removed 421 | 43 injected (precision 10.2%, chance would be 5.0%)
+      removed 421 | 41 injected (precision 9.7%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 98.11% | detection AUROC 67.09%
+  [ceiling  ] n= 20000 | accuracy 98.45% | detection AUROC 86.40%
+
+===== seed 9/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 54 injected (precision 12.8%, chance would be 5.0%)
+      removed 421 | 59 injected (precision 14.0%, chance would be 5.0%)
+      removed 421 | 48 injected (precision 11.4%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 98.33% | detection AUROC 66.82%
+  [ceiling  ] n= 20000 | accuracy 98.66% | detection AUROC 86.94%
+
+===== seed 10/10 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 70 injected (precision 16.6%, chance would be 5.0%)
+      removed 421 | 46 injected (precision 10.9%, chance would be 5.0%)
+      removed 421 | 53 injected (precision 12.6%, chance would be 5.0%)
+  [iterative] n= 19789 | accuracy 98.25% | detection AUROC 67.12%
+  [ceiling  ] n= 20000 | accuracy 98.73% | detection AUROC 86.53%
+
+(finished in 10.0 minutes)
+======================================================================
+RESULTS: Train on digits 0-6, inject 7-9
+======================================================================
+Method                         Accuracy %    Detection AUROC %    Avg precision %
+Iterative cleaning         98.19 +/- 0.13       66.63 +/- 0.41     44.11 +/- 0.50
+Ceiling (no anomalies)     98.62 +/- 0.11       86.50 +/- 0.35     71.54 +/- 0.74
+
+Per-seed difference in percentage points (iterative cleaning minus ceiling):
+  Accuracy             -0.42 +/- 0.12
+  Detection AUROC      -19.87 +/- 0.41
+  Average precision    -27.42 +/- 0.68
+
+REMOVAL QUALITY (did the suspicion score find the injected images?)
+  Precision by round (share of removed images that were injected): 14.7%, 11.9%, 11.2%   [random chance: 5.0%]
+  Injected images found after all rounds: 159 of 1052 (15%)
+  Injected share left in the training set: 4.51% (started at 5.00%)
+
+The ceiling is the no-injected-anomaly reference; it is not an additional cleaning method.
+Displayed and saved 30 selected images to: C:\Users\abhin\OneDrive\Desktop\Research\MNIST Latent Space Cleaning Verification\Autoencoder\Iterations\Train 0-6 inject 7-9\10 Spaces\64 Latent Dimensions\20261110_234149_801883\high_20261110_234630_916402.png
+Displayed and saved 30 selected images to: C:\Users\abhin\OneDrive\Desktop\Research\MNIST Latent Space Cleaning Verification\Autoencoder\Iterations\Train 0-6 inject 7-9\10 Spaces\64 Latent Dimensions\20261110_234149_801883\low_20261110_234630_916402.png

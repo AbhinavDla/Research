@@ -1,0 +1,25 @@
+{
+  "batch_id": "20261111_005211_157385",
+  "scenario_filter": "0-6",
+  "latent_dimension": 64,
+  "latent_space_counts": [
+    5,
+    10
+  ],
+  "notebooks": [
+    "anomaly_cleaning_train_0-6_inject_7-9.ipynb"
+  ],
+  "status": "completed",
+  "experiments": [
+    {
+      "notebook": "anomaly_cleaning_train_0-6_inject_7-9.ipynb",
+      "latent_spaces": 5,
+      "status": "completed"
+    },
+    {
+      "notebook": "anomaly_cleaning_train_0-6_inject_7-9.ipynb",
+      "latent_spaces": 10,
+      "status": "completed"
+    }
+  ]
+}
