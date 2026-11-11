@@ -1,0 +1,481 @@
+======================================================================
+UNSUPERVISED 2D LATENT-SPACE ENSEMBLE
+======================================================================
+
+Device: cpu
+Number of latent spaces: 20
+Latent dimensions: 2
+Nearest neighbors: 5
+
+100.0%
+100.0%
+100.0%
+100.0%
+
+======================================================================
+LATENT SPACE 1/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.067619
+    Epoch 02/10 | Reconstruction Loss: 0.051122
+    Epoch 03/10 | Reconstruction Loss: 0.046954
+    Epoch 04/10 | Reconstruction Loss: 0.044769
+    Epoch 05/10 | Reconstruction Loss: 0.043414
+    Epoch 06/10 | Reconstruction Loss: 0.042511
+    Epoch 07/10 | Reconstruction Loss: 0.041832
+    Epoch 08/10 | Reconstruction Loss: 0.041258
+    Epoch 09/10 | Reconstruction Loss: 0.040808
+    Epoch 10/10 | Reconstruction Loss: 0.040354
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 65.75%
+
+======================================================================
+LATENT SPACE 2/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.068378
+    Epoch 02/10 | Reconstruction Loss: 0.050948
+    Epoch 03/10 | Reconstruction Loss: 0.046913
+    Epoch 04/10 | Reconstruction Loss: 0.044602
+    Epoch 05/10 | Reconstruction Loss: 0.043149
+    Epoch 06/10 | Reconstruction Loss: 0.042200
+    Epoch 07/10 | Reconstruction Loss: 0.041457
+    Epoch 08/10 | Reconstruction Loss: 0.040877
+    Epoch 09/10 | Reconstruction Loss: 0.040352
+    Epoch 10/10 | Reconstruction Loss: 0.039888
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 72.00%
+
+======================================================================
+LATENT SPACE 3/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.066798
+    Epoch 02/10 | Reconstruction Loss: 0.049897
+    Epoch 03/10 | Reconstruction Loss: 0.046524
+    Epoch 04/10 | Reconstruction Loss: 0.044453
+    Epoch 05/10 | Reconstruction Loss: 0.043003
+    Epoch 06/10 | Reconstruction Loss: 0.041989
+    Epoch 07/10 | Reconstruction Loss: 0.041247
+    Epoch 08/10 | Reconstruction Loss: 0.040595
+    Epoch 09/10 | Reconstruction Loss: 0.040083
+    Epoch 10/10 | Reconstruction Loss: 0.039681
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 72.15%
+
+======================================================================
+LATENT SPACE 4/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.066856
+    Epoch 02/10 | Reconstruction Loss: 0.050561
+    Epoch 03/10 | Reconstruction Loss: 0.046977
+    Epoch 04/10 | Reconstruction Loss: 0.044754
+    Epoch 05/10 | Reconstruction Loss: 0.043302
+    Epoch 06/10 | Reconstruction Loss: 0.042218
+    Epoch 07/10 | Reconstruction Loss: 0.041343
+    Epoch 08/10 | Reconstruction Loss: 0.040674
+    Epoch 09/10 | Reconstruction Loss: 0.040103
+    Epoch 10/10 | Reconstruction Loss: 0.039685
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 72.37%
+
+======================================================================
+LATENT SPACE 5/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.066943
+    Epoch 02/10 | Reconstruction Loss: 0.051048
+    Epoch 03/10 | Reconstruction Loss: 0.047215
+    Epoch 04/10 | Reconstruction Loss: 0.044737
+    Epoch 05/10 | Reconstruction Loss: 0.043335
+    Epoch 06/10 | Reconstruction Loss: 0.042290
+    Epoch 07/10 | Reconstruction Loss: 0.041506
+    Epoch 08/10 | Reconstruction Loss: 0.040916
+    Epoch 09/10 | Reconstruction Loss: 0.040359
+    Epoch 10/10 | Reconstruction Loss: 0.039920
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 69.92%
+
+======================================================================
+LATENT SPACE 6/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.067403
+    Epoch 02/10 | Reconstruction Loss: 0.050436
+    Epoch 03/10 | Reconstruction Loss: 0.046632
+    Epoch 04/10 | Reconstruction Loss: 0.044623
+    Epoch 05/10 | Reconstruction Loss: 0.043439
+    Epoch 06/10 | Reconstruction Loss: 0.042591
+    Epoch 07/10 | Reconstruction Loss: 0.041920
+    Epoch 08/10 | Reconstruction Loss: 0.041390
+    Epoch 09/10 | Reconstruction Loss: 0.040893
+    Epoch 10/10 | Reconstruction Loss: 0.040424
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 68.66%
+
+======================================================================
+LATENT SPACE 7/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.069651
+    Epoch 02/10 | Reconstruction Loss: 0.052883
+    Epoch 03/10 | Reconstruction Loss: 0.048070
+    Epoch 04/10 | Reconstruction Loss: 0.045070
+    Epoch 05/10 | Reconstruction Loss: 0.043349
+    Epoch 06/10 | Reconstruction Loss: 0.042226
+    Epoch 07/10 | Reconstruction Loss: 0.041452
+    Epoch 08/10 | Reconstruction Loss: 0.040789
+    Epoch 09/10 | Reconstruction Loss: 0.040231
+    Epoch 10/10 | Reconstruction Loss: 0.039797
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 71.92%
+
+======================================================================
+LATENT SPACE 8/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.068199
+    Epoch 02/10 | Reconstruction Loss: 0.051482
+    Epoch 03/10 | Reconstruction Loss: 0.048162
+    Epoch 04/10 | Reconstruction Loss: 0.045827
+    Epoch 05/10 | Reconstruction Loss: 0.044102
+    Epoch 06/10 | Reconstruction Loss: 0.042828
+    Epoch 07/10 | Reconstruction Loss: 0.041882
+    Epoch 08/10 | Reconstruction Loss: 0.041097
+    Epoch 09/10 | Reconstruction Loss: 0.040417
+    Epoch 10/10 | Reconstruction Loss: 0.039922
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 75.44%
+
+======================================================================
+LATENT SPACE 9/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.068417
+    Epoch 02/10 | Reconstruction Loss: 0.051526
+    Epoch 03/10 | Reconstruction Loss: 0.048233
+    Epoch 04/10 | Reconstruction Loss: 0.046122
+    Epoch 05/10 | Reconstruction Loss: 0.044621
+    Epoch 06/10 | Reconstruction Loss: 0.043477
+    Epoch 07/10 | Reconstruction Loss: 0.042469
+    Epoch 08/10 | Reconstruction Loss: 0.041669
+    Epoch 09/10 | Reconstruction Loss: 0.041075
+    Epoch 10/10 | Reconstruction Loss: 0.040515
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 69.84%
+
+======================================================================
+LATENT SPACE 10/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.067850
+    Epoch 02/10 | Reconstruction Loss: 0.049884
+    Epoch 03/10 | Reconstruction Loss: 0.046533
+    Epoch 04/10 | Reconstruction Loss: 0.044678
+    Epoch 05/10 | Reconstruction Loss: 0.043371
+    Epoch 06/10 | Reconstruction Loss: 0.042355
+    Epoch 07/10 | Reconstruction Loss: 0.041583
+    Epoch 08/10 | Reconstruction Loss: 0.040975
+    Epoch 09/10 | Reconstruction Loss: 0.040476
+    Epoch 10/10 | Reconstruction Loss: 0.040075
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 71.20%
+
+======================================================================
+LATENT SPACE 11/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.067672
+    Epoch 02/10 | Reconstruction Loss: 0.050939
+    Epoch 03/10 | Reconstruction Loss: 0.046944
+    Epoch 04/10 | Reconstruction Loss: 0.044466
+    Epoch 05/10 | Reconstruction Loss: 0.042875
+    Epoch 06/10 | Reconstruction Loss: 0.041940
+    Epoch 07/10 | Reconstruction Loss: 0.041206
+    Epoch 08/10 | Reconstruction Loss: 0.040613
+    Epoch 09/10 | Reconstruction Loss: 0.040143
+    Epoch 10/10 | Reconstruction Loss: 0.039740
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 73.51%
+
+======================================================================
+LATENT SPACE 12/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.067122
+    Epoch 02/10 | Reconstruction Loss: 0.051460
+    Epoch 03/10 | Reconstruction Loss: 0.047395
+    Epoch 04/10 | Reconstruction Loss: 0.045110
+    Epoch 05/10 | Reconstruction Loss: 0.043716
+    Epoch 06/10 | Reconstruction Loss: 0.042783
+    Epoch 07/10 | Reconstruction Loss: 0.042019
+    Epoch 08/10 | Reconstruction Loss: 0.041432
+    Epoch 09/10 | Reconstruction Loss: 0.040930
+    Epoch 10/10 | Reconstruction Loss: 0.040470
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 67.48%
+
+======================================================================
+LATENT SPACE 13/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.067441
+    Epoch 02/10 | Reconstruction Loss: 0.051449
+    Epoch 03/10 | Reconstruction Loss: 0.047780
+    Epoch 04/10 | Reconstruction Loss: 0.045482
+    Epoch 05/10 | Reconstruction Loss: 0.044244
+    Epoch 06/10 | Reconstruction Loss: 0.043317
+    Epoch 07/10 | Reconstruction Loss: 0.042598
+    Epoch 08/10 | Reconstruction Loss: 0.041886
+    Epoch 09/10 | Reconstruction Loss: 0.041458
+    Epoch 10/10 | Reconstruction Loss: 0.040941
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 66.39%
+
+======================================================================
+LATENT SPACE 14/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.068208
+    Epoch 02/10 | Reconstruction Loss: 0.051265
+    Epoch 03/10 | Reconstruction Loss: 0.047368
+    Epoch 04/10 | Reconstruction Loss: 0.044735
+    Epoch 05/10 | Reconstruction Loss: 0.043390
+    Epoch 06/10 | Reconstruction Loss: 0.042513
+    Epoch 07/10 | Reconstruction Loss: 0.041741
+    Epoch 08/10 | Reconstruction Loss: 0.041067
+    Epoch 09/10 | Reconstruction Loss: 0.040528
+    Epoch 10/10 | Reconstruction Loss: 0.040068
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 71.55%
+
+======================================================================
+LATENT SPACE 15/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.067147
+    Epoch 02/10 | Reconstruction Loss: 0.051475
+    Epoch 03/10 | Reconstruction Loss: 0.047619
+    Epoch 04/10 | Reconstruction Loss: 0.045036
+    Epoch 05/10 | Reconstruction Loss: 0.043549
+    Epoch 06/10 | Reconstruction Loss: 0.042633
+    Epoch 07/10 | Reconstruction Loss: 0.041875
+    Epoch 08/10 | Reconstruction Loss: 0.041347
+    Epoch 09/10 | Reconstruction Loss: 0.040880
+    Epoch 10/10 | Reconstruction Loss: 0.040472
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 66.09%
+
+======================================================================
+LATENT SPACE 16/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.068186
+    Epoch 02/10 | Reconstruction Loss: 0.050693
+    Epoch 03/10 | Reconstruction Loss: 0.046513
+    Epoch 04/10 | Reconstruction Loss: 0.044355
+    Epoch 05/10 | Reconstruction Loss: 0.043057
+    Epoch 06/10 | Reconstruction Loss: 0.042100
+    Epoch 07/10 | Reconstruction Loss: 0.041375
+    Epoch 08/10 | Reconstruction Loss: 0.040814
+    Epoch 09/10 | Reconstruction Loss: 0.040381
+    Epoch 10/10 | Reconstruction Loss: 0.039989
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 65.43%
+
+======================================================================
+LATENT SPACE 17/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.066834
+    Epoch 02/10 | Reconstruction Loss: 0.051347
+    Epoch 03/10 | Reconstruction Loss: 0.047483
+    Epoch 04/10 | Reconstruction Loss: 0.045098
+    Epoch 05/10 | Reconstruction Loss: 0.043690
+    Epoch 06/10 | Reconstruction Loss: 0.042744
+    Epoch 07/10 | Reconstruction Loss: 0.042046
+    Epoch 08/10 | Reconstruction Loss: 0.041385
+    Epoch 09/10 | Reconstruction Loss: 0.040891
+    Epoch 10/10 | Reconstruction Loss: 0.040454
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 68.16%
+
+======================================================================
+LATENT SPACE 18/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.067431
+    Epoch 02/10 | Reconstruction Loss: 0.051083
+    Epoch 03/10 | Reconstruction Loss: 0.046800
+    Epoch 04/10 | Reconstruction Loss: 0.044504
+    Epoch 05/10 | Reconstruction Loss: 0.043164
+    Epoch 06/10 | Reconstruction Loss: 0.042227
+    Epoch 07/10 | Reconstruction Loss: 0.041547
+    Epoch 08/10 | Reconstruction Loss: 0.041007
+    Epoch 09/10 | Reconstruction Loss: 0.040501
+    Epoch 10/10 | Reconstruction Loss: 0.040147
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 65.30%
+
+======================================================================
+LATENT SPACE 19/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.067596
+    Epoch 02/10 | Reconstruction Loss: 0.051417
+    Epoch 03/10 | Reconstruction Loss: 0.048049
+    Epoch 04/10 | Reconstruction Loss: 0.045282
+    Epoch 05/10 | Reconstruction Loss: 0.043721
+    Epoch 06/10 | Reconstruction Loss: 0.042711
+    Epoch 07/10 | Reconstruction Loss: 0.041934
+    Epoch 08/10 | Reconstruction Loss: 0.041324
+    Epoch 09/10 | Reconstruction Loss: 0.040783
+    Epoch 10/10 | Reconstruction Loss: 0.040366
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 67.68%
+
+======================================================================
+LATENT SPACE 20/20
+======================================================================
+    Epoch 01/10 | Reconstruction Loss: 0.066705
+    Epoch 02/10 | Reconstruction Loss: 0.049658
+    Epoch 03/10 | Reconstruction Loss: 0.046164
+    Epoch 04/10 | Reconstruction Loss: 0.044363
+    Epoch 05/10 | Reconstruction Loss: 0.043032
+    Epoch 06/10 | Reconstruction Loss: 0.042029
+    Epoch 07/10 | Reconstruction Loss: 0.041377
+    Epoch 08/10 | Reconstruction Loss: 0.040799
+    Epoch 09/10 | Reconstruction Loss: 0.040317
+    Epoch 10/10 | Reconstruction Loss: 0.039970
+
+    Latent-space learning complete.
+    Encoder is now frozen for evaluation.
+    Creating labeled reference map...
+    Evaluating this latent space...
+    Accuracy: 66.40%
+
+======================================================================
+INDIVIDUAL LATENT-SPACE RESULTS
+======================================================================
+Latent Space 01: 65.75%
+Latent Space 02: 72.00%
+Latent Space 03: 72.15%
+Latent Space 04: 72.37%
+Latent Space 05: 69.92%
+Latent Space 06: 68.66%
+Latent Space 07: 71.92%
+Latent Space 08: 75.44%
+Latent Space 09: 69.84%
+Latent Space 10: 71.20%
+Latent Space 11: 73.51%
+Latent Space 12: 67.48%
+Latent Space 13: 66.39%
+Latent Space 14: 71.55%
+Latent Space 15: 66.09%
+Latent Space 16: 65.43%
+Latent Space 17: 68.16%
+Latent Space 18: 65.30%
+Latent Space 19: 67.68%
+Latent Space 20: 66.40%
+
+Mean individual accuracy: 69.36%
+Standard deviation: 2.96%
+
+======================================================================
+SINGLE IMAGE DEMONSTRATION
+======================================================================
+
+Actual digit: 7
+
+Predictions from the 20 latent spaces:
+    Space 01: 7
+    Space 02: 7
+    Space 03: 7
+    Space 04: 7
+    Space 05: 7
+    Space 06: 7
+    Space 07: 7
+    Space 08: 7
+    Space 09: 7
+    Space 10: 7
+    Space 11: 7
+    Space 12: 7
+    Space 13: 7
+    Space 14: 7
+    Space 15: 7
+    Space 16: 7
+    Space 17: 7
+    Space 18: 7
+    Space 19: 7
+    Space 20: 7
+
+Final vote counts:
+    Digit 7: 20 votes
+
+FINAL PREDICTION: 7
+
+======================================================================
+EVALUATING COMPLETE 20-SPACE ENSEMBLE...
+======================================================================
+
+Mean Individual Accuracy: 69.36%
+Ensemble Accuracy: 78.46%
+Ensemble vs Mean Improvement: +9.10 percentage points
