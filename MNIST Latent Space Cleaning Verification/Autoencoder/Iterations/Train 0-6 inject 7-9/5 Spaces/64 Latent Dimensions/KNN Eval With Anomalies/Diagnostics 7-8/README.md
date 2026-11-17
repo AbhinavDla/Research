@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Iterative cleaning diagnostics: inject 7-9
 
 The folder's historical name says `Diagnostics 7-8`, but this experiment uses
@@ -67,3 +68,24 @@ as references; the ceiling uses a separately trained normal-only model and
 reference. Labels are used for evaluation and visualizations, not for training
 or removal. Test anomaly prevalence differs from the training injection
 fraction.
+=======
+# Iterative cleaning diagnostics: inject 7-8
+
+This separate experiment uses the model, scoring and contaminated-reference evaluation from the original **KNN With Anomalies** notebook. It trains on normal digits 0-6, injects digits 7 and 8, and excludes digit 9. Existing 7-9 results are not overwritten or directly comparable.
+
+When ready, from the workspace root run:
+
+```sh
+python3 'MNIST Latent Space Cleaning Verification/Autoencoder/Iterations/Train 0-6 inject 7-9/5 Spaces/64 Latent Dimensions/KNN Eval With Anomalies/Diagnostics 7-8/run_diagnostics.py'
+```
+
+Dependencies are PyTorch, torchvision, NumPy, matplotlib, scikit-learn and `umap-learn`. MNIST must already be present in a parent directory's `data/MNIST` folder. The source notebook must remain in `Autoencoder/Versions/KNN With Anomalies`.
+
+The defaults train five seeds, with 64 dimensions, 15 epochs, three cleaning rounds, and independent trajectories for k=5, 10 and 20. Both cleaning and evaluation use the selected k, so this is a joint sensitivity comparison rather than an isolated evaluation-only sweep. The default run is computationally expensive: it fits 60 UMAPs in addition to the autoencoders and produces many plots.
+
+Each invocation creates a timestamped `run_...` directory containing `config.json`, a `summary.md`, per-seed metrics, per-round removal statistics, and counts by digit. Every `seed_NN/k_NN` folder has UMAP plots and coordinates before every removal and after the final retraining. The overview identifies normal and injected digits, highlighting which are removed or retained; a second figure highlights each digit separately. The CSV identifies each plotted point by its MNIST training index, true digit, injection status and removal status. Round score CSVs contain all current points and their underlying cleaning signals, and round folders contain score distributions and examples of removed normal and injected digits.
+
+By default UMAP includes every current point. To limit plotting work, use for example `--umap-sample 5000`: all injected and removed points are still included, and retained normal points are sampled to fill the limit. The limit can be exceeded when the required points alone exceed it. UMAP fits independently for each model and stage; coordinates, cluster sizes, and distances cannot be compared directly across plots, and visual separation does not prove separation in the 64-dimensional space. Use the per-point CSVs, score distributions and evaluation metrics alongside the plots.
+
+The uncleaned baseline and iterative test evaluation deliberately use their contaminated training sets as references, matching the original notebook's evaluation approach. The ceiling uses a separately trained normal-only model and reference. Ground-truth digit labels are used only for evaluation and visualizations, not for training or removal. Test anomaly prevalence differs from the training injection fraction.
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
