@@ -1,0 +1,30 @@
+{
+  "k_values": [
+    5
+  ],
+  "seeds": 5,
+  "epochs": 15,
+  "pool_size": 20000,
+  "inject_fraction": 0.05,
+  "remove_fraction": 0.02,
+  "rounds": 3,
+  "umap_sample": 0,
+  "normal_digits": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "anomaly_digits": [
+    7,
+    8,
+    9
+  ],
+  "latent_dim": 64,
+  "source_notebook": "C:\\Users\\abhin\\OneDrive\\Desktop\\Research\\MNIST Latent Space Cleaning Verification\\Autoencoder\\Versions\\KNN With Anomalies\\anomaly_cleaning_train_0-6_inject_7-9_before_evaluation_fix.ipynb",
+  "status": "completed",
+  "elapsed_seconds": 796.24
+}
