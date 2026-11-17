@@ -1,5 +1,5 @@
 """
-UNSUPERVISED 2D LATENT-SPACE ENSEMBLE FOR MNIST
+UNSUPERVISED LATENT-SPACE ENSEMBLE FOR MNIST
 ================================================
 
 PURPOSE
@@ -7,17 +7,13 @@ PURPOSE
 This program tests whether UNSUPERVISED latent spaces naturally organize
 MNIST images in a way that is useful for classification.
 
-We train 20 completely independent autoencoders.
+We train independently initialized autoencoders.
 
 Each autoencoder compresses:
 
-    784 pixel values -> 2 latent values
+    784 pixel values -> LATENT_DIM latent values
 
-So every MNIST image becomes a point:
-
-    (x, y)
-
-in a two-dimensional latent space.
+Each MNIST image becomes a point in the learned latent space.
 
 
 IMPORTANT EXPERIMENTAL IDEA
@@ -26,19 +22,19 @@ NO digit labels are used to train the autoencoders.
 
 The autoencoder only learns:
 
-    Image -> (x,y) -> Reconstructed Image
+    Image -> latent representation -> Reconstructed Image
 
 After training is COMPLETELY finished, the encoder is frozen.
 
 We then:
 
     1. Pass all training images through the frozen encoder.
-    2. Record their (x,y) coordinates.
+    2. Record their latent coordinates.
     3. Attach their known labels to those coordinates.
 
 For a NEW image:
 
-    1. Use the frozen encoder to obtain its (x,y).
+    1. Use the frozen encoder to obtain its latent coordinates.
     2. Calculate its distance to every reference point.
     3. Find the K nearest points.
     4. Look at their labels.
@@ -51,7 +47,7 @@ The classification step is simply:
     Euclidean distance + local majority voting
 
 
-WHY 20 LATENT SPACES?
+WHY MULTIPLE LATENT SPACES?
 ---------------------
 Each autoencoder starts with different random weights and experiences
 a different shuffled training process.
@@ -66,7 +62,7 @@ For one unknown image:
     ...
     Space 20 -> 7
 
-Then the 20 spaces vote.
+Then the spaces vote.
 
 The most common prediction becomes the final prediction.
 """
@@ -85,7 +81,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, TensorDataset
 from torchvision import datasets, transforms
 
 
@@ -94,14 +90,9 @@ from torchvision import datasets, transforms
 # ============================================================
 
 # Number of independently learned latent spaces.
-NUM_MODELS = 25
+NUM_MODELS = 10
 
-# We specifically want a TWO-DIMENSIONAL latent space.
-#
-# Every MNIST image will become:
-#
-#     (x, y)
-#
+# Number of coordinates in each latent representation.
 LATENT_DIM = 64
 
 # Number of times each autoencoder sees the entire training dataset.
@@ -130,7 +121,7 @@ DEVICE = torch.device(
 
 class Autoencoder(nn.Module):
     """
-    Autoencoder used to learn ONE 2D latent space.
+    Autoencoder used to learn one latent space.
 
     Architecture:
 
@@ -138,7 +129,7 @@ class Autoencoder(nn.Module):
             ↓
           Encoder
             ↓
-          (x, y)
+          latent vector
             ↓
           Decoder
             ↓
@@ -159,7 +150,7 @@ class Autoencoder(nn.Module):
         #
         # Compress:
         #
-        # 784 -> 256 -> 128 -> 2
+        # 784 -> 256 -> 128 -> latent_dim
 
         self.encoder = nn.Sequential(
 
@@ -179,7 +170,7 @@ class Autoencoder(nn.Module):
         #
         # Reconstruct:
         #
-        # 2 -> 128 -> 256 -> 784
+        # latent_dim -> 128 -> 256 -> 784
 
         self.decoder = nn.Sequential(
 
@@ -228,7 +219,7 @@ def set_seed(seed):
 
     Different seeds cause different initial neural-network weights.
 
-    This helps our 20 autoencoders discover different latent spaces.
+    This helps the autoencoders discover different latent spaces.
     """
 
     random.seed(seed)
@@ -274,7 +265,7 @@ def train_autoencoder(model, train_loader):
 
     for epoch in range(EPOCHS):
 
-        total_loss = 0.0
+        total_loss = torch.zeros((), device=DEVICE)
 
         # The dataset gives us labels, but "_labels" indicates
         # that we intentionally do not use them.
@@ -291,7 +282,7 @@ def train_autoencoder(model, train_loader):
 
             optimizer.zero_grad()
 
-            reconstruction, latent = model(images)
+            reconstruction, _ = model(images)
 
             loss = reconstruction_loss_function(
                 reconstruction,
@@ -304,7 +295,7 @@ def train_autoencoder(model, train_loader):
             # Update the autoencoder.
             optimizer.step()
 
-            total_loss += loss.item()
+            total_loss += loss.detach()
 
         average_loss = total_loss / len(train_loader)
 
@@ -324,7 +315,7 @@ def extract_latent_features(model, loader):
 
     For every image we obtain:
 
-        image -> encoder -> (x,y)
+        image -> encoder -> latent vector
 
     We return:
 
@@ -506,7 +497,7 @@ def predict_one_image(
 
     The same image is passed through all 20 encoders.
 
-    Each encoder produces its own (x,y) coordinate.
+    Each encoder produces its own latent vector.
 
     Each latent space then determines the local class using
     nearest-neighbor lookup.
@@ -619,58 +610,31 @@ def evaluate_single_latent_space(
 
     against:
 
-        20-space ensemble accuracy
+        ensemble accuracy
     """
 
-    model.eval()
+    points, labels = extract_latent_features(model, test_loader)
+    predictions = batched_knn_predictions(points, reference_points, reference_labels, k)
+    return float(np.mean(predictions == labels))
 
-    correct = 0
-    total = 0
 
-    with torch.no_grad():
-
-        for images, labels in test_loader:
-
-            images = images.to(DEVICE)
-
-            flattened_images = images.view(
-                images.size(0),
-                -1
-            )
-
-            # Convert entire test batch into 2D coordinates.
-            latent_points = model.encoder(
-                flattened_images
-            )
-
-            latent_points = (
-                latent_points
-                .cpu()
-                .numpy()
-            )
-
-            labels = labels.numpy()
-
-            # Classify each point using only local geometry.
-            for point, true_label in zip(
-                latent_points,
-                labels
-            ):
-
-                prediction = classify_from_latent_space(
-                    point,
-                    reference_points,
-                    reference_labels,
-                    k=k
-                )
-
-                if prediction == int(true_label):
-
-                    correct += 1
-
-                total += 1
-
-    return correct / total
+@torch.no_grad()
+def batched_knn_predictions(points, reference_points, reference_labels, k=5, batch_size=128):
+    """Classify points in GPU-sized batches, using the same smallest-digit tie break."""
+    references = torch.as_tensor(reference_points, device=DEVICE)
+    labels = torch.as_tensor(reference_labels, dtype=torch.long, device=DEVICE)
+    queries = torch.as_tensor(points, device=DEVICE)
+    if k < 1 or k > len(references):
+        raise ValueError("k must be between 1 and the number of reference points")
+    predictions = []
+    for start in range(0, len(queries), batch_size):
+        distances = torch.cdist(queries[start:start + batch_size], references)
+        indices = distances.topk(k, largest=False, sorted=False).indices
+        neighbor_labels = labels[indices]
+        counts = torch.zeros((len(indices), 10), dtype=torch.long, device=DEVICE)
+        counts.scatter_add_(1, neighbor_labels, torch.ones_like(neighbor_labels))
+        predictions.append(counts.argmax(dim=1).cpu())
+    return torch.cat(predictions).numpy()
 
 
 # ============================================================
@@ -685,34 +649,22 @@ def evaluate_ensemble(
     k=5
 ):
     """
-    Evaluate the majority vote from all 20 latent spaces.
+    Evaluate the majority vote from all latent spaces.
     """
 
-    correct = 0
-    total = 0
-
-    for images, labels in test_loader:
-
-        for image, true_label in zip(
-            images,
-            labels
-        ):
-
-            final_prediction, _, _ = predict_one_image(
-                image,
-                models,
-                reference_points_list,
-                reference_labels_list,
-                k=k
-            )
-
-            if final_prediction == int(true_label):
-
-                correct += 1
-
-            total += 1
-
-    return correct / total
+    predictions = []
+    labels = None
+    for model, references, reference_labels in zip(
+        models, reference_points_list, reference_labels_list
+    ):
+        points, labels = extract_latent_features(model, test_loader)
+        predictions.append(batched_knn_predictions(points, references, reference_labels, k))
+    if labels is None:
+        raise ValueError("The ensemble must contain at least one model and reference set")
+    # Counter.most_common resolves a tie by the earliest space's prediction.
+    final = np.array([Counter(column).most_common(1)[0][0]
+                      for column in np.stack(predictions, axis=1)])
+    return float(np.mean(final == labels))
 
 
 # ============================================================
@@ -721,8 +673,11 @@ def evaluate_ensemble(
 
 def main():
 
+    if NUM_MODELS < 1:
+        raise ValueError("NUM_MODELS must be at least 1")
+
     print("=" * 70)
-    print("UNSUPERVISED 2D LATENT-SPACE ENSEMBLE")
+    print("UNSUPERVISED LATENT-SPACE ENSEMBLE")
     print("=" * 70)
 
     print(f"\nDevice: {DEVICE}")
@@ -761,20 +716,24 @@ def main():
     # When extracting reference points, shuffling isn't necessary.
     # Keeping it off also makes the reference map reproducible.
 
+    train_tensors = TensorDataset(train_dataset.data.float().div(255).unsqueeze(1),
+                                  train_dataset.targets)
+    test_tensors = TensorDataset(test_dataset.data.float().div(255).unsqueeze(1),
+                                 test_dataset.targets)
     train_loader = DataLoader(
-        train_dataset,
+        train_tensors,
         batch_size=BATCH_SIZE,
         shuffle=True
     )
 
     reference_loader = DataLoader(
-        train_dataset,
+        train_tensors,
         batch_size=BATCH_SIZE,
         shuffle=False
     )
 
     test_loader = DataLoader(
-        test_dataset,
+        test_tensors,
         batch_size=BATCH_SIZE,
         shuffle=False
     )
@@ -793,6 +752,8 @@ def main():
     reference_labels_list = []
 
     individual_accuracies = []
+    all_predictions = []
+    test_labels = None
 
     # --------------------------------------------------------
     # TRAIN 20 INDEPENDENT LATENT SPACES
@@ -860,7 +821,7 @@ def main():
             model
         )
 
-        # Store this model's 2D reference map.
+        # Store this model's reference points.
         reference_points_list.append(
             reference_points
         )
@@ -877,13 +838,12 @@ def main():
             "    Evaluating this latent space..."
         )
 
-        accuracy = evaluate_single_latent_space(
-            model,
-            reference_points,
-            reference_labels,
-            test_loader,
-            k=K_NEIGHBORS
+        test_points, test_labels = extract_latent_features(model, test_loader)
+        predictions = batched_knn_predictions(
+            test_points, reference_points, reference_labels, k=K_NEIGHBORS
         )
+        all_predictions.append(predictions)
+        accuracy = float(np.mean(predictions == test_labels))
 
         individual_accuracies.append(
             accuracy
@@ -958,7 +918,7 @@ def main():
     )
 
     print(
-        "\nPredictions from the 20 latent spaces:"
+        f"\nPredictions from the {NUM_MODELS} latent spaces:"
     )
 
     for index, prediction in enumerate(
@@ -995,18 +955,18 @@ def main():
 
     print(
         "EVALUATING COMPLETE "
-        "20-SPACE ENSEMBLE..."
+        f"{NUM_MODELS}-SPACE ENSEMBLE..."
     )
 
     print("=" * 70)
 
-    ensemble_accuracy = evaluate_ensemble(
-        models,
-        reference_points_list,
-        reference_labels_list,
-        test_loader,
-        k=K_NEIGHBORS
-    )
+    if test_labels is None:
+        raise ValueError("The ensemble must contain at least one model")
+    ensemble_predictions = np.array([
+        Counter(row).most_common(1)[0][0]
+        for row in np.stack(all_predictions, axis=1)
+    ])
+    ensemble_accuracy = float(np.mean(ensemble_predictions == test_labels))
 
     print(
         f"\nMean Individual Accuracy: "
@@ -1051,7 +1011,7 @@ class Tee:
         return any(stream.isatty() for stream in self.streams)
 
 if __name__ == "__main__":
-    output_dir = Path(__file__).parent / "Iterations" / "25 Spaces"
+    output_dir = Path(__file__).parent / "Iterations" / f"{NUM_MODELS} Spaces"
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / f"{LATENT_DIM} Latent Dimensions.txt"
 

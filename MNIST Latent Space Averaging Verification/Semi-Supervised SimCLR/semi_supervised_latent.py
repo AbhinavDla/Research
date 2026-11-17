@@ -21,8 +21,8 @@ from torchvision import datasets
 # CONFIGURATION
 # ============================================================
 
-NUM_MODELS = 20          # number of independent latent spaces (ensemble size)
-LATENT_DIM = 32         # length of each image's embedding vector
+NUM_MODELS = 10          # number of independent latent spaces (ensemble size)
+LATENT_DIM = 64         # length of each image's embedding vector
 K_NEIGHBORS = 5          # neighbors used in kNN voting
 
 EPOCHS = 10              # increased epochs for better convergence
@@ -147,7 +147,7 @@ def train_simclr(model, images):
 
     for epoch in range(EPOCHS):
         perm = torch.randperm(N)
-        total_loss, num_batches = 0.0, 0
+        total_loss, num_batches = torch.zeros((), device=DEVICE), 0
 
         for start in range(0, N - BATCH_SIZE + 1, BATCH_SIZE):
             batch = images[perm[start:start + BATCH_SIZE]].to(DEVICE)
@@ -164,7 +164,7 @@ def train_simclr(model, images):
             optimizer.step()
             scheduler.step()
 
-            total_loss += loss.item()
+            total_loss += loss.detach()
             num_batches += 1
 
         if (epoch + 1) % 5 == 0 or epoch == 0:
@@ -204,11 +204,11 @@ def knn_predict(query_feats, ref_feats, ref_labels, k, chunk_size=2048):
         
         _, topk_indices = torch.topk(dist_sq, k, dim=1, largest=False, sorted=False)
         topk_labels = ref_labels[topk_indices]
-        for i in range(topk_labels.size(0)):
-            counts = torch.bincount(topk_labels[i], minlength=10)
-            preds.append(counts.argmax().item())
+        counts = torch.zeros((topk_labels.size(0), 10), dtype=torch.long, device=DEVICE)
+        counts.scatter_add_(1, topk_labels, torch.ones_like(topk_labels))
+        preds.append(counts.argmax(dim=1).cpu())
 
-    return torch.tensor(preds, device="cpu")
+    return torch.cat(preds)
 
 
 def choose_labeled_indices(train_labels, per_class, seed=0):
