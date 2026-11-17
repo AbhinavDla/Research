@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Iterative cleaning diagnostics: inject 7-9
 
 The folder's historical name says `Diagnostics 7-8`, but this experiment uses
@@ -69,6 +70,8 @@ reference. Labels are used for evaluation and visualizations, not for training
 or removal. Test anomaly prevalence differs from the training injection
 fraction.
 =======
+=======
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 # Iterative cleaning diagnostics: inject 7-8
 
 This separate experiment uses the model, scoring and contaminated-reference evaluation from the original **KNN With Anomalies** notebook. It trains on normal digits 0-6, injects digits 7 and 8, and excludes digit 9. Existing 7-9 results are not overwritten or directly comparable.
@@ -87,5 +90,9 @@ Each invocation creates a timestamped `run_...` directory containing `config.jso
 
 By default UMAP includes every current point. To limit plotting work, use for example `--umap-sample 5000`: all injected and removed points are still included, and retained normal points are sampled to fill the limit. The limit can be exceeded when the required points alone exceed it. UMAP fits independently for each model and stage; coordinates, cluster sizes, and distances cannot be compared directly across plots, and visual separation does not prove separation in the 64-dimensional space. Use the per-point CSVs, score distributions and evaluation metrics alongside the plots.
 
+<<<<<<< HEAD
+The uncleaned baseline and iterative test evaluation deliberately use their contaminated training sets as references, matching the original notebook's evaluation approach. The ceiling uses a separately trained normal-only model and reference. Ground-truth digit labels are used only for evaluation and visualizations, not for training or removal. Test anomaly prevalence differs from the training injection fraction.
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
+=======
 The uncleaned baseline and iterative test evaluation deliberately use their contaminated training sets as references, matching the original notebook's evaluation approach. The ceiling uses a separately trained normal-only model and reference. Ground-truth digit labels are used only for evaluation and visualizations, not for training or removal. Test anomaly prevalence differs from the training injection fraction.
 >>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e

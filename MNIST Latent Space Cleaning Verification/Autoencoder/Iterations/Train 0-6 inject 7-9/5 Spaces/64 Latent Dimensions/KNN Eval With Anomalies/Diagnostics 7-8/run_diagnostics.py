@@ -1,14 +1,20 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Run five-space cleaning diagnostics for MNIST digits 0-6 with 7-9 injected."""
 
 import argparse
 import csv
 import importlib
 =======
+=======
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 """Run five-space cleaning diagnostics for MNIST digits 0-6 with 7-8 injected."""
 
 import argparse
 import csv
+<<<<<<< HEAD
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
+=======
 >>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 import json
 import random
@@ -33,7 +39,11 @@ NOTEBOOK = (AUTOENCODER / "Versions" / "KNN With Anomalies" /
             "anomaly_cleaning_train_0-6_inject_7-9_before_evaluation_fix.ipynb")
 NORMAL_DIGITS = list(range(7))
 <<<<<<< HEAD
+<<<<<<< HEAD
 ANOMALY_DIGITS = [7, 8, 9]
+=======
+ANOMALY_DIGITS = [7, 8]
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 =======
 ANOMALY_DIGITS = [7, 8]
 >>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
@@ -61,6 +71,11 @@ def write_csv(path, rows):
 
 def make_umap(latents, labels, indices, removed_mask, output_dir, title, sample_size, seed):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    from umap.umap_ import UMAP
+
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 =======
     from umap.umap_ import UMAP
 
@@ -74,9 +89,14 @@ def make_umap(latents, labels, indices, removed_mask, output_dir, title, sample_
     if len(chosen) < 3:
         raise ValueError("UMAP needs at least three sampled training images")
 <<<<<<< HEAD
+<<<<<<< HEAD
     umap = importlib.import_module("umap")
     coordinates = np.asarray(umap.UMAP(n_neighbors=min(15, len(chosen) - 1), random_state=seed,
                                        n_jobs=1).fit_transform(latents[chosen].numpy()))
+=======
+    coordinates = np.asarray(UMAP(n_neighbors=min(15, len(chosen) - 1), random_state=seed,
+                                  n_jobs=1).fit_transform(latents[chosen].numpy()))
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 =======
     coordinates = np.asarray(UMAP(n_neighbors=min(15, len(chosen) - 1), random_state=seed,
                                   n_jobs=1).fit_transform(latents[chosen].numpy()))
@@ -117,7 +137,10 @@ def make_umap(latents, labels, indices, removed_mask, output_dir, title, sample_
     plt.close(fig)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
     fig, axes = plt.subplots(3, 3, figsize=(15, 15), sharex=True, sharey=True, constrained_layout=True)
     for axis, digit in zip(axes.flat, NORMAL_DIGITS + ANOMALY_DIGITS):
         mask = labels[chosen] == digit
@@ -133,6 +156,9 @@ def make_umap(latents, labels, indices, removed_mask, output_dir, title, sample_
     plt.close(fig)
 
 
+<<<<<<< HEAD
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
+=======
 >>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 def scalar_metrics(metrics):
     return {key: float(metrics[key]) for key in ("acc", "auc", "ap", "auc_latent", "auc_recon")}
@@ -301,6 +327,7 @@ def run_experiment(args, output_dir, namespace):
         write_csv(output_dir / "rounds.csv", round_rows)
         write_csv(output_dir / "digits.csv", digit_rows)
 <<<<<<< HEAD
+<<<<<<< HEAD
     return metrics_rows, round_rows, digit_rows
 
 
@@ -357,6 +384,8 @@ def write_summary(output_dir, args, metrics, rounds, digits):
              "- **Mean +/- population standard deviation:** average across seeds and how much the seed results vary. "
              "These are descriptive, not confidence intervals.", "",
 =======
+=======
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
     return metrics_rows, round_rows
 
 
@@ -372,6 +401,9 @@ def write_summary(output_dir, args, metrics, rounds):
              "UMAP fits independently at every stage: coordinates and distances are not comparable across plots.",
              "By default all points are shown. If sampling is enabled, all removed and injected points are included and normal retained points are sampled.",
              "UMAP is a visualization, not the space used for KNN or scoring.", "",
+<<<<<<< HEAD
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
+=======
 >>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
              "## Results", "", "Values are mean +/- population standard deviation across seeds.", "",
              "| k | method | accuracy | AUROC | average precision | latent AUROC | reconstruction AUROC |",
@@ -389,6 +421,7 @@ def write_summary(output_dir, args, metrics, rounds):
             lines.append(f"| {k} | {round_index} | " + " | ".join(
                 f"{np.mean([row[key] for row in selected]):.3f}" for key in
                 ("precision", "random_precision", "recall_cumulative")) + " |")
+<<<<<<< HEAD
 <<<<<<< HEAD
     lines += ["", "## What these results mean", ""]
     for k in args.k_values:
@@ -448,12 +481,18 @@ def write_summary(output_dir, args, metrics, rounds):
                      f"{row['injected_remaining']} | {row['acc']:.3f} | {row['auc']:.3f} | {row['ap']:.3f} |")
 =======
 >>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
+=======
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
     lines += ["", "## Files", "", "- metrics.csv: per-seed evaluation metrics and retained anomaly counts.",
               "- rounds.csv: per-seed removal precision, current random baseline and cumulative recall.",
               "- digits.csv: available and removed counts for each digit, round, seed and k.",
               "- seed_NN/k_NN/round_NN_scores.csv: all current images, scores and removal decisions.",
               "- seed_NN/k_NN/*_umap.png and .csv: projections, true digits, injection and removal status.",
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+              "- seed_NN/k_NN/*_umap_digits.png: each digit highlighted separately in the same projection.",
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 =======
               "- seed_NN/k_NN/*_umap_digits.png: each digit highlighted separately in the same projection.",
 >>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
@@ -465,7 +504,11 @@ def write_summary(output_dir, args, metrics, rounds):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
 <<<<<<< HEAD
+<<<<<<< HEAD
     parser.add_argument("--k-values", type=int, nargs="+", default=[5],
+=======
+    parser.add_argument("--k-values", type=int, nargs="+", default=[5, 10, 20],
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 =======
     parser.add_argument("--k-values", type=int, nargs="+", default=[5, 10, 20],
 >>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
@@ -486,6 +529,7 @@ def main():
         parser.error("Counts and k values must be positive, k values unique, fractions between 0 and 1, and UMAP sample 0 or >= 3")
     try:
 <<<<<<< HEAD
+<<<<<<< HEAD
         importlib.import_module("umap")
     except ModuleNotFoundError as error:
         if error.name != "umap":
@@ -494,11 +538,16 @@ def main():
     output_dir = AUTOENCODER / "Diagnostics runs" / datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
     output_dir.mkdir(parents=True)
 =======
+=======
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
         import umap  # noqa: F401
     except ImportError:
         parser.error("UMAP is required: install umap-learn in the Python environment running this script")
     output_dir = HERE / datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
     output_dir.mkdir()
+<<<<<<< HEAD
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
+=======
 >>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
     config = vars(args) | {"normal_digits": NORMAL_DIGITS, "anomaly_digits": ANOMALY_DIGITS,
                           "latent_dim": 64, "source_notebook": str(NOTEBOOK), "status": "running"}
@@ -508,10 +557,15 @@ def main():
     started = time.monotonic()
     try:
 <<<<<<< HEAD
+<<<<<<< HEAD
         namespace = {"np": np, "torch": torch, "nn": nn, "F": F, "random": random,
                      "average_precision_score": average_precision_score, "roc_auc_score": roc_auc_score}
         metrics, rounds, digits = run_experiment(args, output_dir, namespace)
         write_summary(output_dir, args, metrics, rounds, digits)
+=======
+        metrics, rounds = run_experiment(args, output_dir, globals().copy())
+        write_summary(output_dir, args, metrics, rounds)
+>>>>>>> 0d0fe084b37c813077df5428afe4048c7b4b732e
 =======
         metrics, rounds = run_experiment(args, output_dir, globals().copy())
         write_summary(output_dir, args, metrics, rounds)
