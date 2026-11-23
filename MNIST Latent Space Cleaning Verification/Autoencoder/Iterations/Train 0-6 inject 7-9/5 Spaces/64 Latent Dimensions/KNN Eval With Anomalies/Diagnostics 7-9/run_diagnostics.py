@@ -37,6 +37,7 @@ import torch.nn.functional as F
 from sklearn.metrics import average_precision_score, roc_auc_score
 # torchvision loads the local MNIST training and test datasets.
 from torchvision import datasets
+from compare_diagnostics import write_results_text
 
 
 # HERE is the directory containing this script.
@@ -44,8 +45,7 @@ HERE = Path(__file__).resolve().parent
 # AUTOENCODER is the enclosing Autoencoder project folder.
 AUTOENCODER = HERE.parents[5]
 # The notebook is the source of the model, training, scoring, and evaluation functions.
-NOTEBOOK = (AUTOENCODER / "Versions" / "KNN With Anomalies" /
-            "anomaly_cleaning_train_0-6_inject_7-9_before_evaluation_fix.ipynb")
+NOTEBOOK = AUTOENCODER / "anomaly_cleaning_train_0-6_inject_7-9_before_evaluation_fix.ipynb"
 # Digits 0 through 6 are treated as normal examples.
 NORMAL_DIGITS = list(range(7))
 # Digits 7 through 9 are injected into training and treated as test anomalies.
@@ -128,48 +128,46 @@ def make_umap(latents, labels, indices, removed_mask, output_dir, title, sample_
     # Save the coordinate table next to the plot using the same basename.
     write_csv(output_dir.with_suffix(".csv"), rows)
 
-    # Create two panels sharing the same UMAP coordinates.
-    fig, axes = plt.subplots(1, 2, figsize=(16, 7), constrained_layout=True)
-    # tab10 provides distinct colors for the ten true MNIST digit labels.
-    colors = plt.get_cmap("tab10")
-    # On the left panel, color each point by its true digit.
-    for digit in NORMAL_DIGITS + ANOMALY_DIGITS:
-        # Select plotted examples whose label matches this digit.
-        mask = labels[chosen] == digit
-        # Give injected digits larger x markers and normal digits smaller circles.
-        # This panel is ground truth for interpretation, not an algorithm input.
-        axes[0].scatter(coordinates[mask, 0], coordinates[mask, 1], s=12 if digit in ANOMALY_DIGITS else 5,
-                        alpha=0.8 if digit in ANOMALY_DIGITS else 0.45,
-                        marker="x" if digit in ANOMALY_DIGITS else "o",
-                        color=colors(digit), label=f"{digit} ({mask.sum()})", rasterized=True)
-    # Explain the digit colors and number of plotted examples in each group.
-    axes[0].legend(title="True digit", markerscale=2, ncol=3, fontsize=8)
-    # Restrict the second panel to the same selected examples.
-    selected_injected = injected[chosen]
-    selected_removed = removed_mask[chosen]
-    # Define the four possible truth/removal groups for the right panel.
-    masks = (~selected_injected & ~selected_removed, ~selected_injected & selected_removed,
-             selected_injected & ~selected_removed, selected_injected & selected_removed)
-    # Draw retained/removed normal and injected examples with separate symbols.
-    for mask, label, color, size, marker in zip(
-            masks, ("Retained normal", "Removed normal", "Retained injected", "Removed injected"),
-            ("#b3b3b3", "#d62728", "#0072b2", "#cc79a7"), (5, 12, 20, 24), ("o", "o", "x", "x")):
-        # Reuse the left panel's coordinates; only the group coloring changes.
-        axes[1].scatter(coordinates[mask, 0], coordinates[mask, 1], s=size, alpha=0.8,
-                        color=color, marker=marker, label=f"{label} ({mask.sum()})", rasterized=True)
-    # Identify the four cleaning-outcome groups.
-    axes[1].legend(markerscale=2)
-    # State what each panel shows and clarify that digit labels are evaluation truth.
-    axes[0].set_title("True digit (evaluation only)")
-    axes[1].set_title("Ground truth and removal in this round")
-    # Label both projected axes; these are not original latent dimensions.
-    for axis in axes:
-        axis.set_xlabel("UMAP 1")
-        axis.set_ylabel("UMAP 2")
-    # Include stage identity and plotted/total point counts in the title.
-    fig.suptitle(title + f" | {len(chosen)} of {len(labels)} points")
-    # Save the visualization as a PNG and release its memory.
-    fig.savefig(output_dir.with_suffix(".png"), dpi=150)
+
+def make_overview(projection_dir, output_path, seed, k, score_mode):
+    """Render the four saved projections without refitting UMAP."""
+    from matplotlib.lines import Line2D
+
+    markers = ("o", "s", "^", "v", "D", "P", "X", "<", ">", "*")
+    colors = ("#a9a9a9",) * 7 + ("#0072b2", "#d55e00", "#cc79a7")
+    fig, axes = plt.subplots(2, 2, figsize=(18, 15), constrained_layout=True)
+    for axis, name, title in zip(axes.flat,
+                                 ("round_01_umap", "round_02_umap", "round_03_umap", "final_umap"),
+                                 ("Round 1: before removal", "Round 2: before removal",
+                                  "Round 3: before removal", "Final: after retraining")):
+        with (projection_dir / f"{name}.csv").open(newline="", encoding="utf-8") as file:
+            rows = list(csv.DictReader(file))
+        digits = np.array([int(row["digit"]) for row in rows])
+        points = np.array([[float(row["umap_1"]), float(row["umap_2"])] for row in rows])
+        removed = np.array([row["removed_this_round"].lower() == "true" for row in rows])
+        for digit in range(10):
+            mask = digits == digit
+            axis.scatter(points[mask, 0], points[mask, 1], marker=markers[digit],
+                         c=colors[digit], s=10 if digit < 7 else 20,
+                         alpha=0.5 if digit < 7 else 0.9, linewidths=0, rasterized=True)
+        axis.scatter(points[removed, 0], points[removed, 1], marker="o", s=38,
+                     facecolors="none", edgecolors="black", linewidths=0.6,
+                     alpha=0.8, rasterized=True)
+        removed_injected = int((removed & (digits >= 7)).sum())
+        axis.set_title(f"{title} | shown: {len(rows):,}\n"
+                       f"Removed: {removed.sum() - removed_injected:,} normal, "
+                       f"{removed_injected:,} injected | injected shown: {(digits >= 7).sum():,}")
+        axis.set(xlabel="UMAP 1", ylabel="UMAP 2")
+    handles = [Line2D([], [], linestyle="", marker=markers[digit], color=colors[digit],
+                      markersize=8, label=f"{digit}" + (" (injected)" if digit >= 7 else ""))
+               for digit in range(10)]
+    handles.append(Line2D([], [], linestyle="", marker="o", markerfacecolor="none",
+                          markeredgecolor="black", markersize=8, label="Removed this round"))
+    fig.legend(handles=handles, loc="outside lower center", ncol=6, title="True digit (evaluation only)")
+    fig.suptitle(f"{score_mode} scoring | seed {seed} | k={k}\n"
+                 "Separate UMAP fits: positions and distances are not comparable between panels")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, dpi=160)
     plt.close(fig)
 
 
@@ -180,12 +178,12 @@ def scalar_metrics(metrics):
     return {key: float(metrics[key]) for key in ("acc", "auc", "ap", "auc_latent", "auc_recon")}
 
 
-def plot_removal_diagnostics(images, labels, injected, removed, knn, rec, scores, path):
-    """Save score distributions, signal relationships, and removed-image examples."""
+def plot_score_diagnostics(injected, removed, knn, rec, scores, path, score_mode):
+    """Save score distributions and signal relationships."""
     # Create a score histogram and a scatter plot of the two cleaning signals.
     fig, axes = plt.subplots(1, 2, figsize=(12, 4), constrained_layout=True)
     # Compare normal and injected examples separately in both views.
-    for mask, label, color in [(~injected, "Normal", "#3979a3"),
+    for mask, label, color in [(~injected, "Normal", "#a9a9a9"),
                                (injected, "Injected", "#d55e00")]:
         # The histogram shows score distributions for the two ground-truth groups.
         axes[0].hist(scores[mask], bins=40, density=True, alpha=0.55, label=label, color=color)
@@ -195,7 +193,7 @@ def plot_removal_diagnostics(images, labels, injected, removed, knn, rec, scores
     # Mark the lowest score among selected removals as the effective cutoff.
     axes[0].axvline(scores[removed].min(), color="black", linestyle="--", label="Removal cutoff")
     # Label the axes and titles for the two signal diagnostic plots.
-    axes[0].set(xlabel="Combined rank score", ylabel="Density", title="Score distributions")
+    axes[0].set(xlabel=f"{score_mode} rank score", ylabel="Density", title="Score distributions")
     axes[1].set(xlabel="Mean kNN distance", ylabel="Reconstruction error per ink",
                 title="Cleaning signals")
     # Show the normal/injected legend on each panel.
@@ -204,6 +202,11 @@ def plot_removal_diagnostics(images, labels, injected, removed, knn, rec, scores
     # Write the two-panel plot and close the figure.
     fig.savefig(path / "score_diagnostics.png", dpi=150)
     plt.close(fig)
+
+
+def plot_removal_diagnostics(images, labels, injected, removed, knn, rec, scores, path, score_mode):
+    """Save score distributions, signal relationships, and removed-image examples."""
+    plot_score_diagnostics(injected, removed, knn, rec, scores, path, score_mode)
 
     # Reserve up to eight image thumbnails for each removal outcome.
     fig, axes = plt.subplots(2, 8, figsize=(16, 5), squeeze=False, constrained_layout=True)
@@ -239,7 +242,7 @@ def run_experiment(args, output_dir, namespace):
     # Supply notebook globals for this diagnostic: fixed latent width, requested
     # epochs, batch size, learning rate, and the combined kNN/reconstruction score.
     namespace.update({"LATENT_DIM": 64, "EPOCHS": args.epochs, "BATCH_SIZE": 128,
-                      "LEARNING_RATE": 1e-3, "SCORE_MODE": "combined"})
+                      "LEARNING_RATE": 1e-3, "SCORE_MODE": args.score_mode})
     # Prefer CUDA, then Apple Metal (MPS), and fall back to the CPU.
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -324,8 +327,8 @@ def run_experiment(args, output_dir, namespace):
             len(images) - removal_count * args.rounds <= max(args.k_values)):
             raise ValueError("Removal settings leave too few samples or remove none")
         # Create this seed's output folder.
-        seed_dir = output_dir / f"seed_{seed + 1:02d}"
-        seed_dir.mkdir()
+        seed_dir = output_dir / "data" / f"seed_{seed + 1:02d}"
+        seed_dir.mkdir(parents=True)
         # Report pool composition before beginning the k trajectories.
         print(f"Seed {seed + 1}/{args.seeds}: {pool_size} normal, {inject_count} injected", flush=True)
 
@@ -337,6 +340,8 @@ def run_experiment(args, output_dir, namespace):
             # Place this k value's plots and per-round artifacts in its own folder.
             k_dir = seed_dir / f"k_{k:02d}"
             k_dir.mkdir()
+            figures_dir = output_dir / "figures" / f"seed_{seed + 1:02d}" / f"k_{k:02d}"
+            figures_dir.mkdir(parents=True)
             # current stores positions into images/labels, initially all examples.
             current = np.arange(len(images))
             # Train once before cleaning and once after each removal round.
@@ -366,6 +371,8 @@ def run_experiment(args, output_dir, namespace):
                               np.zeros(len(current), dtype=bool), k_dir / "final_umap",
                               f"Seed {seed + 1}, final retained set, k={k}",
                               args.umap_sample, seed)
+                    make_overview(k_dir, figures_dir / "cleaning_overview.png",
+                                  seed + 1, k, args.score_mode)
                     # Report final classification and detection metrics.
                     print(f"  k={k}: accuracy={result['acc']:.4f}, AUROC={result['auc']:.4f}, AP={result['ap']:.4f}", flush=True)
                     # No more cleaning is needed for this k trajectory.
@@ -406,7 +413,7 @@ def run_experiment(args, output_dir, namespace):
                 rows = [{"mnist_train_index": int(all_indices[index]), "digit": int(labels[index]),
                      "injected": bool(injected[index]), "removed": bool(removed_mask[position]),
                      "knn_distance": float(knn[position]), "reconstruction_error_per_ink": float(rec[position]),
-                     "combined_rank_score": float(scores[position])}
+                     "rank_score": float(scores[position])}
                     # position indexes arrays aligned to current; index maps back
                     # to the original position in images/all_indices.
                     for position, index in enumerate(current)]
@@ -418,11 +425,11 @@ def run_experiment(args, output_dir, namespace):
                       f"Seed {seed + 1}, before removal round {round_index + 1}, k={k}",
                       args.umap_sample, seed + round_index)
                 # Prepare a directory for the signal and removed-image diagnostics.
-                round_dir = k_dir / f"round_{round_index + 1:02d}"
+                round_dir = figures_dir / f"round_{round_index + 1:02d}"
                 round_dir.mkdir()
                 # Save histograms, signal scatter, and example removed images.
                 plot_removal_diagnostics(images[current], labels[current], injected[current],
-                             removed_mask, knn, rec, scores, round_dir)
+                             removed_mask, knn, rec, scores, round_dir, args.score_mode)
                 # Report how many injected anomalies were among this round's removals.
                 print(f"  k={k} round={round_index + 1}: removed {hits}/{removal_count} injected", flush=True)
                 # Apply the removal mask; later rounds train only on retained examples.
@@ -439,9 +446,9 @@ def run_experiment(args, output_dir, namespace):
             metrics_rows.append({"seed": seed + 1, "k": k, "method": "ceiling",
                                  "reference_count": pool_size, "injected_remaining": 0, **result})
         # Persist cumulative results after each seed so partial runs retain progress.
-        write_csv(output_dir / "metrics.csv", metrics_rows)
-        write_csv(output_dir / "rounds.csv", round_rows)
-        write_csv(output_dir / "digits.csv", digit_rows)
+        write_csv(output_dir / "data" / "metrics.csv", metrics_rows)
+        write_csv(output_dir / "data" / "rounds.csv", round_rows)
+        write_csv(output_dir / "data" / "digits.csv", digit_rows)
     # Return all rows so write_summary can add aggregate explanations and tables.
     return metrics_rows, round_rows, digit_rows
 
@@ -449,9 +456,16 @@ def run_experiment(args, output_dir, namespace):
 def write_summary(output_dir, args, metrics, rounds, digits):
     """Write an interpretation guide and aggregate/per-seed results as Markdown."""
     # Begin with the experimental setup and essential cautions for interpreting plots.
-    lines = ["# Iterative cleaning diagnostics", "",
+    score_description = {
+        "combined": "the average of the two relative ranks",
+        "latent": "the relative rank of the kNN distance alone",
+        "recon": "the relative rank of reconstruction error alone",
+    }[args.score_mode]
+    lines = [f"# Iterative cleaning diagnostics: {args.score_mode} scoring", "",
              "Normal digits: 0-6. Injected and test anomaly digits: 7-9.",
              f"Spaces: {args.seeds} independently sampled seeds; each model has 64 latent dimensions.",
+             "Seed folder numbers start at 1; the corresponding initial sampling seeds start at 0. "
+             "For zero-based run index s, training uses seeds 100*s + round index (0-3), and 100*s + 92 for the ceiling.",
              f"Each seed has {args.rounds} cleaning rounds and one final plot. K values: {args.k_values}.",
              "Each k has its own retrained cleaning trajectory. The same k is used for cleaning and evaluation.",
              "The uncleaned and iterative evaluations use their contaminated training sets as KNN references.",
@@ -462,10 +476,10 @@ def write_summary(output_dir, args, metrics, rounds, digits):
              "UMAP is a visualization, not the space used for KNN or scoring.", "",
              # Explain the visual encoding of the two UMAP panels.
              "## How to read the plots", "",
-             f"For each seed, open `round_01_umap.png` through `round_{args.rounds:02d}_umap.png` in order, then `final_umap.png`. "
+             "For each seed, open `figures/seed_NN/k_NN/cleaning_overview.png`. "
              "The round plots show the training set *before* that round's removal; the final plot shows what remains after all rounds and retraining. "
-             "The left panel colors each digit, using crosses for the injected digits 7-9. "
-             "The right panel distinguishes retained and removed normal images and retained and removed injected images. "
+             "Shapes identify the true digits; normal digits are grey and injected digits are colored. "
+             "A black ring marks an image removed in that round. "
              "Labels reveal the true outcome for analysis; the cleaning algorithm does not use them. "
              "Counts in the legends are plotted counts, not necessarily full-dataset counts when sampling is enabled.", "",
              "Each plot is a fresh UMAP fit of that stage's 64-dimensional representations. "
@@ -483,7 +497,7 @@ def write_summary(output_dir, args, metrics, rounds, digits):
              "For each image, the method measures (1) the average distance to its k nearest other images in the latent space, "
              "and (2) reconstruction error, the squared pixel differences between the image and its reconstruction, "
              "divided by the image's total ink. Larger values can indicate unusual images. "
-             "Each signal is converted to a relative rank from 0 to 1 among the current images; their average is the combined suspicion score. "
+             f"Each signal is converted to a relative rank from 0 to 1 among the current images; this method uses {score_description}. "
              "This is not a probability. The highest-scoring images are removed, without using their labels. "
              "Each round removes the same number, calculated from the original mixed pool, not from the shrinking pool. "
              "The final model is retrained after the last removal.", "",
@@ -603,12 +617,12 @@ def write_summary(output_dir, args, metrics, rounds, digits):
         lines.append(f"| {row['seed']} | {row['k']} | {row['method']} | {row['reference_count']} | "
                      f"{row['injected_remaining']} | {row['acc']:.3f} | {row['auc']:.3f} | {row['ap']:.3f} |")
     # List the output files and what analysis data each contains.
-    lines += ["", "## Files", "", "- metrics.csv: per-seed evaluation metrics and retained anomaly counts.",
-              "- rounds.csv: per-seed removal precision, current random baseline and cumulative recall.",
-              "- digits.csv: available and removed counts for each digit, round, seed and k.",
-              "- seed_NN/k_NN/round_NN_scores.csv: all current images, scores and removal decisions.",
-              "- seed_NN/k_NN/*_umap.png and .csv: projections, true digits, injection and removal status.",
-              "- seed_NN/k_NN/round_NN/: signal distributions and examples of removed normal and injected digits.",
+    lines += ["", "## Files", "", "- data/metrics.csv: per-seed evaluation metrics and retained anomaly counts.",
+              "- data/rounds.csv: per-seed removal precision, current random baseline and cumulative recall.",
+              "- data/digits.csv: available and removed counts for each digit, round, seed and k.",
+              "- data/seed_NN/k_NN/round_NN_scores.csv: all current images, scores and removal decisions.",
+              "- data/seed_NN/k_NN/*_umap.csv: projections, true digits, injection and removal status.",
+              "- figures/seed_NN/k_NN/: four-panel overview, signal distributions and examples of removed digits.",
               "- config.json: full settings and source notebook."]
     # Join Markdown lines with newline characters and end the file with a newline.
     (output_dir / "summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -633,6 +647,10 @@ def main():
     parser.add_argument("--remove-fraction", type=float, default=0.02)
     # Number of iterative cleaning rounds.
     parser.add_argument("--rounds", type=int, default=3)
+    parser.add_argument("--score-mode", choices=("combined", "latent", "recon"), default="combined",
+                        help="Use both ranks, latent kNN distance only, or reconstruction error only")
+    parser.add_argument("--output-root", type=Path, default=AUTOENCODER / "Diagnostics runs",
+                        help="Root directory for method folders")
     # Maximum UMAP points; zero means plot all points, otherwise removed/injected
     # examples are still always retained and only normal retained points are sampled.
     parser.add_argument("--umap-sample", type=int, default=0,
@@ -640,12 +658,12 @@ def main():
     # Parse command-line text into typed argument values.
     args = parser.parse_args()
     # Validate positive counts, unique k values, valid fractions, and sample size.
-    if (args.seeds < 1 or args.epochs < 1 or args.pool_size < 1 or args.rounds < 1 or
+    if (args.seeds < 1 or args.epochs < 1 or args.pool_size < 1 or args.rounds != 3 or
             (args.umap_sample != 0 and args.umap_sample < 3) or not 0 < args.inject_fraction < 1 or
             not 0 < args.remove_fraction < 1 or any(k < 1 for k in args.k_values) or
             len(set(args.k_values)) != len(args.k_values)):
         # argparse.error prints usage and exits with a nonzero status.
-        parser.error("Counts and k values must be positive, k values unique, fractions between 0 and 1, and UMAP sample 0 or >= 3")
+        parser.error("Counts and k values must be positive, rounds must be 3, k values unique, fractions between 0 and 1, and UMAP sample 0 or >= 3")
     # Check UMAP availability before creating output artifacts or training.
     try:
         importlib.import_module("umap")
@@ -656,11 +674,11 @@ def main():
         # Tell the user the dependency and expected package to install.
         parser.error("UMAP is required: install umap-learn in the Python environment running this script")
     # Place timestamped run output in the Autoencoder diagnostics archive.
-    output_dir = AUTOENCODER / "Diagnostics runs" / datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
+    output_dir = args.output_root / args.score_mode / datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
     # Create parent folders and this unique run folder.
     output_dir.mkdir(parents=True)
     # Capture all settings and initial status for provenance/recovery.
-    config = vars(args) | {"normal_digits": NORMAL_DIGITS, "anomaly_digits": ANOMALY_DIGITS,
+    config = {**vars(args), "output_root": str(args.output_root)} | {"normal_digits": NORMAL_DIGITS, "anomaly_digits": ANOMALY_DIGITS,
                           "latent_dim": 64, "source_notebook": str(NOTEBOOK), "status": "running"}
     # Keep the config path so status and elapsed time can be rewritten at completion.
     config_path = output_dir / "config.json"
@@ -677,6 +695,7 @@ def main():
         # Train/evaluate each seed and write the explanatory report.
         metrics, rounds, digits = run_experiment(args, output_dir, namespace)
         write_summary(output_dir, args, metrics, rounds, digits)
+        write_results_text(output_dir, config, args.score_mode, metrics, rounds)
     except Exception as error:
         # Record the exception type/message, then re-raise so the run fails visibly.
         config.update(status="failed", error=f"{type(error).__name__}: {error}")

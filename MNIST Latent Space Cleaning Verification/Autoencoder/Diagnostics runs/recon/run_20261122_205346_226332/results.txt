@@ -1,0 +1,58 @@
+======================================================================
+SCENARIO: Train on digits 0-6, inject 7-9  (latent dim 64, score mode recon)
+Reconstructed from saved diagnostics; this is not the original training log.
+======================================================================
+
+===== seed 1/5 | k=5 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 54 injected (precision 12.8%, chance would be 5.0%)
+      removed 421 | 45 injected (precision 10.7%, chance would be 4.8%)
+      removed 421 | 39 injected (precision 9.3%, chance would be 4.7%)
+  [iterative] n= 19789 | accuracy 98.31% | detection AUROC 66.21%
+  [ceiling  ] n= 20000 | accuracy 98.50% | detection AUROC 75.99%
+
+===== seed 2/5 | k=5 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 53 injected (precision 12.6%, chance would be 5.0%)
+      removed 421 | 54 injected (precision 12.8%, chance would be 4.8%)
+      removed 421 | 26 injected (precision 6.2%, chance would be 4.7%)
+  [iterative] n= 19789 | accuracy 98.47% | detection AUROC 65.54%
+  [ceiling  ] n= 20000 | accuracy 98.63% | detection AUROC 74.75%
+
+===== seed 3/5 | k=5 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 49 injected (precision 11.6%, chance would be 5.0%)
+      removed 421 | 45 injected (precision 10.7%, chance would be 4.9%)
+      removed 421 | 31 injected (precision 7.4%, chance would be 4.7%)
+  [iterative] n= 19789 | accuracy 98.24% | detection AUROC 65.82%
+  [ceiling  ] n= 20000 | accuracy 98.68% | detection AUROC 75.33%
+
+===== seed 4/5 | k=5 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 53 injected (precision 12.6%, chance would be 5.0%)
+      removed 421 | 51 injected (precision 12.1%, chance would be 4.8%)
+      removed 421 | 47 injected (precision 11.2%, chance would be 4.7%)
+  [iterative] n= 19789 | accuracy 98.11% | detection AUROC 66.23%
+  [ceiling  ] n= 20000 | accuracy 98.55% | detection AUROC 76.04%
+
+===== seed 5/5 | k=5 | 20000 normal + 1052 injected | removing 421 per round for 3 rounds =====
+      removed 421 | 58 injected (precision 13.8%, chance would be 5.0%)
+      removed 421 | 39 injected (precision 9.3%, chance would be 4.8%)
+      removed 421 | 47 injected (precision 11.2%, chance would be 4.7%)
+  [iterative] n= 19789 | accuracy 98.18% | detection AUROC 66.24%
+  [ceiling  ] n= 20000 | accuracy 98.48% | detection AUROC 75.70%
+
+======================================================================
+RESULTS: Train on digits 0-6, inject 7-9 | k=5
+======================================================================
+Method                     Accuracy %    Detection AUROC %    Avg precision %
+Iterative cleaning       98.26 +/- 0.12   66.01 +/- 0.28   42.27 +/- 0.24
+Ceiling (no anomalies)   98.57 +/- 0.08   75.56 +/- 0.48   53.68 +/- 0.57
+
+Per-seed difference in percentage points (iterative cleaning minus ceiling):
+  Accuracy             -0.31 +/- 0.12
+  Detection AUROC      -9.56 +/- 0.22
+  Average precision    -11.42 +/- 0.38
+
+REMOVAL QUALITY (did the suspicion score find the injected images?)
+  Precision by round: 12.7%, 11.1%, 9.0%
+  Injected images found after all rounds: 138.2 of 1052 (13.1%)
+  Injected share left in the training set: 4.62%
+
+The ceiling is the no-injected-anomaly reference; it is not a cleaning method.
