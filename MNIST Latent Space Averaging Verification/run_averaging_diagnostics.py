@@ -154,6 +154,8 @@ def run(method, args):
     spaces_folder = f"SimCLR {args.spaces} Spaces" if method == "simclr" else f"{args.spaces} Spaces"
     # Use a caller-provided output root when present; otherwise store under Iterations.
     base = args.output_root if args.output_root else ROOT / folder / "Iterations"
+    if method == "simclr":
+        base = base / model_module.reference_folder_name(model_module.REFERENCE_LABELS_PER_CLASS)
     # Separate outputs by number of spaces, latent width, and timestamped run.
     output = (base / spaces_folder /
               f"{args.dimensions} Latent Dimensions" / "Diagnostics" /
@@ -187,6 +189,9 @@ def run(method, args):
     config = {"method": method, "spaces": args.spaces, "latent_dimensions": args.dimensions,
               "epochs": model_module.EPOCHS, "batch_size": model_module.BATCH_SIZE,
               "k": model_module.K_NEIGHBORS, "train_images": len(train_x),
+              "reference_images": (len(train_x) if method == "autoencoder"
+                                   or model_module.REFERENCE_LABELS_PER_CLASS is None
+                                   else 10 * model_module.REFERENCE_LABELS_PER_CLASS),
               "test_images": len(test_x), "umap_points_per_space": len(indices),
               # Each independent model receives its own training seed.
               "seeds": list(range(1000, 1000 + args.spaces)),
@@ -210,8 +215,9 @@ def run(method, args):
         # Visit training examples in stable order when extracting kNN references.
         reference_loader = DataLoader(train_data, batch_size=model_module.BATCH_SIZE, shuffle=False)
     else:
-        # SimCLR uses a labeled subset as its separate kNN reference set.
-        reference_indices = model_module.choose_labeled_indices(train.targets, 50)
+        # Labels are used only for the kNN reference set, not encoder training.
+        reference_indices = model_module.choose_labeled_indices(
+            train.targets, model_module.REFERENCE_LABELS_PER_CLASS)
 
     # Keep every model's predictions so they can be combined after training.
     all_predictions = []
@@ -341,8 +347,7 @@ def run(method, args):
     # Count images space 1 gets right when the ensemble gets them wrong.
     first_only = int((~ensemble_correct & first_correct).sum())
     # Describe the kNN reference examples used by this method.
-    reference = ("all 60,000 labeled training images" if method == "autoencoder"
-                 else "50 labeled training images per digit (500 total)")
+    reference = f"{config['reference_images']:,} labeled training images"
     # State the applicable tie-break behavior in the human-readable report.
     tie_rule = ("the earliest space's tied prediction" if method == "autoencoder"
                 else "the smallest tied digit")

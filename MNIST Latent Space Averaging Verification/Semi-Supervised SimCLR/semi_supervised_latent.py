@@ -1,5 +1,5 @@
 """
-SimCLR LATENT-SPACE ENSEMBLE FOR MNIST  (self-supervised encoders + few labels)
+SimCLR LATENT-SPACE ENSEMBLE FOR MNIST  (self-supervised encoders + kNN)
 ================================================================================
 """
 
@@ -8,6 +8,7 @@ import random
 import sys
 import time
 from contextlib import redirect_stderr, redirect_stdout
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
@@ -31,14 +32,11 @@ BATCH_SIZE = 512
 LEARNING_RATE = 3e-3     # adjusted base LR for AdamW
 TEMPERATURE = 0.5        # SimCLR sharpness knob
 
-# How many LABELED images per class the kNN reference set gets.
-LABELS_PER_CLASS = [50]
+# None uses all training labels for kNN, not for encoder training.
+REFERENCE_LABELS_PER_CLASS = None
+LABELS_PER_CLASS = [REFERENCE_LABELS_PER_CLASS]
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-OUTPUT_DIR = Path(__file__).parent / "Iterations" / f"SimCLR {NUM_MODELS} Spaces"
-OUTPUT_FILE = OUTPUT_DIR / f"{LATENT_DIM} Latent Dimensions.txt"
-
 
 # ============================================================
 # DATA (loaded once, kept in memory as tensors)
@@ -186,7 +184,7 @@ def encode(model, images, batch_size=2048):
 
 
 @torch.no_grad()
-def knn_predict(query_feats, ref_feats, ref_labels, k, chunk_size=2048):
+def knn_predict(query_feats, ref_feats, ref_labels, k, chunk_size=128):
     query_feats = query_feats.to(DEVICE)
     ref_feats = ref_feats.to(DEVICE)
     ref_labels = ref_labels.to(DEVICE)
@@ -226,6 +224,10 @@ def choose_labeled_indices(train_labels, per_class, seed=0):
 
 def setting_name(per_class):
     return "all labels" if per_class is None else f"{per_class} labels/class"
+
+
+def reference_folder_name(per_class):
+    return "All Training Labels" if per_class is None else f"{per_class} Labels Per Class"
 
 
 # ============================================================
@@ -347,9 +349,13 @@ class Tee:
 
 
 if __name__ == "__main__":
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    with OUTPUT_FILE.open("w", encoding="utf-8") as output_file:
+    output_dir = (Path(__file__).parent / "Iterations" /
+                  reference_folder_name(REFERENCE_LABELS_PER_CLASS) /
+                  f"SimCLR {NUM_MODELS} Spaces" / f"{LATENT_DIM} Latent Dimensions" /
+                  datetime.now().strftime("run_%Y%m%d_%H%M%S_%f"))
+    output_dir.mkdir(parents=True)
+    print(f"Saving results to: {output_dir / 'results.txt'}")
+    with (output_dir / "results.txt").open("x", encoding="utf-8") as output_file:
         output = Tee(sys.stdout, output_file)
         with redirect_stdout(output), redirect_stderr(output):
             main()

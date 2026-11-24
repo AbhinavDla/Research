@@ -21,6 +21,13 @@ classification errors. CSV files record predictions, accuracies and coordinates.
 The autoencoder run also generates a plain-language `summary.md`. SimCLR's
 existing summary is left unchanged.
 
+Both methods train their encoders without digit labels and use all 60,000 labeled
+training images as the kNN reference set. The test images remain held out.
+SimCLR's previous 50-labels-per-class results are under
+`Semi-Supervised SimCLR/Iterations/50 Labels Per Class/`; new runs use
+`Semi-Supervised SimCLR/Iterations/All Training Labels/`. The standalone SimCLR
+script also saves each run in a separate timestamped directory there.
+
 Use `--method autoencoder` or `--method simclr` to run just one method.
 `--spaces` and `--dimensions` change the experiment and output folder names.
 For other options, run the command with `--help`.
