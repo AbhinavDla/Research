@@ -1,0 +1,27 @@
+{
+  "method": "simclr",
+  "spaces": 10,
+  "latent_dimensions": 64,
+  "epochs": 10,
+  "batch_size": 512,
+  "k": 5,
+  "train_images": 60000,
+  "reference_images": 60000,
+  "test_images": 10000,
+  "umap_points_per_space": 10000,
+  "seeds": [
+    1000,
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009
+  ],
+  "device": "mps",
+  "status": "completed",
+  "elapsed_seconds": 849.35
+}

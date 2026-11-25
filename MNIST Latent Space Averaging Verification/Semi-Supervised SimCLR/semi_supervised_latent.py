@@ -36,7 +36,11 @@ TEMPERATURE = 0.5        # SimCLR sharpness knob
 REFERENCE_LABELS_PER_CLASS = None
 LABELS_PER_CLASS = [REFERENCE_LABELS_PER_CLASS]
 
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+DEVICE = torch.device(
+    "cuda" if torch.cuda.is_available()
+    else "mps" if torch.backends.mps.is_available()
+    else "cpu"
+)
 
 # ============================================================
 # DATA (loaded once, kept in memory as tensors)

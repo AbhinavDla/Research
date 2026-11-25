@@ -9,8 +9,9 @@ python "MNIST Latent Space Averaging Verification\run_averaging_diagnostics.py"
 ```
 
 MNIST must already be present in the repository's `data\MNIST\raw` directory.
-The default runs 10 spaces with 64 dimensions and uses CUDA when available.
-Training and kNN use the selected PyTorch device; UMAP runs on the CPU.
+The default runs 10 spaces with 64 dimensions. SimCLR uses CUDA when available,
+then Apple MPS, then CPU; the autoencoder uses CUDA when available, otherwise
+CPU. Training and kNN use the selected PyTorch device; UMAP runs on the CPU.
 Install a missing UMAP dependency in your active environment with
 `python -m pip install umap-learn`.
 
